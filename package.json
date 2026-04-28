@@ -1,0 +1,14 @@
+{
+  "name": "jose-gabriel-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static portfolio maintenance scripts for Jose Gabriel Sierra Ariza.",
+  "type": "module",
+  "scripts": {
+    "build:scripts": "node tools/build-classic-bundle.mjs",
+    "check": "npm run build:scripts && node tools/check-js.mjs && node tools/check-layering.mjs",
+    "serve": "node tools/serve-static.mjs",
+    "screenshots": "npm run build:scripts && node tools/capture-screenshots.mjs",
+    "verify": "npm run check && npm run screenshots"
+  }
+}

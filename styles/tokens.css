@@ -1,0 +1,65 @@
+:root {
+  --color-bg: #060606;
+  --color-fg: #f0ede8;
+  --color-surface: #0e0e0e;
+  --color-surface-hover: #161616;
+  --color-accent: #cc3300;
+  --color-card: #f4f0eb;
+  --color-ink: #111;
+  --color-fg-rgb: 240, 237, 232;
+  --color-black-rgb: 0, 0, 0;
+  --color-white-rgb: 255, 255, 255;
+
+  --font-body: 'Space Mono', monospace;
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-card: Georgia, serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-9: 36px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-15: 60px;
+  --space-20: 80px;
+  --page-pad-x: var(--space-8);
+  --nav-pad-y: var(--space-6);
+  --bottom-bar-height: 46px;
+  --pill-radius: 99px;
+
+  --duration-instant: 0.01s;
+  --duration-quick: 0.08s;
+  --duration-fast: 0.1s;
+  --duration-base: 0.2s;
+  --duration-medium: 0.3s;
+  --duration-slow: 0.4s;
+  --duration-panel: 0.45s;
+  --duration-overlay: 0.55s;
+  --duration-reveal: 0.6s;
+  --ease-panel: cubic-bezier(0.76,0,0.24,1);
+  --ease-reveal: cubic-bezier(0.16,1,0.3,1);
+  --ease-switch: cubic-bezier(0.4,0,0.2,1);
+  --ease-scroll: cubic-bezier(0.4,0,0.6,1);
+
+  --z-underlay: 2;
+  --z-hero: 5;
+  --z-objects: 8;
+  --z-marquee: 19;
+  --z-content: 20;
+  --z-panel: 240;
+  --z-panel-wipe: 260;
+  --z-scanline: 98;
+  --z-grain: 99;
+  --z-vnav: 150;
+  --z-nav: 200;
+  --z-nav-control: 201;
+  --z-scroll: 300;
+  --z-cursor: 9999;
+
+  --focus-ring: 2px solid var(--color-fg);
+  --focus-offset: 4px;
+}

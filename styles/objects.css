@@ -1,0 +1,119 @@
+/* FLOATING OBJECTS */
+.objects {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-objects);
+  pointer-events: none;
+}
+.obj {
+  position: absolute;
+  animation: bob linear infinite;
+  will-change: transform;
+}
+@keyframes bob {
+  0%   { transform: translateY(0px)   rotate(var(--r, 0deg)); }
+  25%  { transform: translateY(-16px) rotate(calc(var(--r,0deg) + 2deg)); }
+  50%  { transform: translateY(-8px)  rotate(calc(var(--r,0deg) - 1deg)); }
+  75%  { transform: translateY(-18px) rotate(calc(var(--r,0deg) + 1.5deg)); }
+  100% { transform: translateY(0px)   rotate(var(--r, 0deg)); }
+}
+
+/* 1 — Metallic diamond top-left */
+.obj-diamond {
+  width: 100px; height: 100px;
+  background: radial-gradient(ellipse at 38% 28%, #ffffff 0%, #c8c8c8 25%, #888 55%, #444 85%, var(--color-ink) 100%);
+  clip-path: polygon(50% 0%, 100% 35%, 75% 100%, 25% 100%, 0% 35%);
+  filter: drop-shadow(0 10px 28px rgba(var(--color-black-rgb), 0.8));
+  top: 10%; left: 8%;
+  --r: -6deg;
+  animation-duration: 7s;
+  animation-delay: 0s;
+}
+
+/* 2 — Purple crystal top-right */
+.obj-crystal {
+  width: 50px; height: 120px;
+  background: linear-gradient(170deg, #e8e2ff 0%, #a090e0 20%, #5b4aaa 50%, #2a1f60 80%, #0d0920 100%);
+  clip-path: polygon(50% 0%, 95% 22%, 85% 85%, 55% 100%, 15% 78%, 5% 20%);
+  filter: drop-shadow(0 12px 36px rgba(120,90,220,0.3));
+  top: 7%; right: 11%;
+  --r: 8deg;
+  animation-duration: 9s;
+  animation-delay: -2s;
+}
+
+/* 3 — Red pill bottom-left */
+.obj-pill {
+  width: 148px; height: 60px;
+  background: linear-gradient(125deg, #ff5533 0%, #cc2200 40%, #7a0a00 100%);
+  border-radius: 100px;
+  box-shadow: inset 0 8px 16px rgba(255,120,80,0.35), inset 0 -6px 10px rgba(var(--color-black-rgb), 0.55), 0 8px 28px rgba(180,30,0,0.4);
+  bottom: 24%; left: 6%;
+  --r: -15deg;
+  animation-duration: 8.5s;
+  animation-delay: -1.5s;
+}
+
+/* 4 — Chrome sphere bottom-right */
+.obj-sphere {
+  width: 108px; height: 108px;
+  background: radial-gradient(circle at 32% 28%, #ffffff 0%, #d0d0d0 15%, #909090 40%, #404040 70%, #0d0d0d 100%);
+  border-radius: 50%;
+  filter: drop-shadow(0 14px 32px rgba(var(--color-black-rgb), 0.75));
+  bottom: 18%; right: 8%;
+  animation-duration: 7.2s;
+  animation-delay: -3s;
+}
+
+/* 5 — Gold bar right of sphere */
+.obj-gold {
+  width: 115px; height: 52px;
+  background: linear-gradient(130deg, #f7d94c 0%, #d4a018 28%, #f0d460 52%, #8c6a10 78%, #f7d94c 100%);
+  border-radius: 4px;
+  box-shadow: inset 0 4px 10px rgba(255,240,130,0.4), inset 0 -4px 8px rgba(var(--color-black-rgb), 0.45), 0 8px 24px rgba(200,160,0,0.3);
+  bottom: 28%; right: 6%;
+  --r: -10deg;
+  animation-duration: 6.8s;
+  animation-delay: -5s;
+}
+
+/* 6 — Playing card left middle */
+.obj-card {
+  width: 72px; height: 104px;
+  background: var(--color-card);
+  border-radius: 7px;
+  filter: drop-shadow(0 10px 28px rgba(var(--color-black-rgb), 0.65));
+  top: 52%; left: 3.5%;
+  --r: 16deg;
+  animation-duration: 10s;
+  animation-delay: -4.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 6px 8px;
+  overflow: hidden;
+}
+.obj-card::before {
+  content: 'A';
+  font-family: var(--font-card);
+  font-size: 20px;
+  color: var(--color-ink);
+  font-weight: bold;
+  line-height: 1;
+}
+.obj-card::after {
+  content: '♠';
+  font-family: var(--font-card);
+  font-size: 14px;
+  color: var(--color-ink);
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.obj-diamond  { animation: bob 7s 0.3s linear infinite; }
+.obj-crystal  { animation: bob 9s -2s linear infinite; }
+.obj-pill     { animation: bob 8.5s -1.5s linear infinite; }
+.obj-sphere   { animation: bob 7.2s -3s linear infinite; }
+.obj-gold     { animation: bob 6.8s -5s linear infinite; }
+.obj-card     { animation: bob 10s -4.2s linear infinite; }

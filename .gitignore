@@ -1,0 +1,16 @@
+.DS_Store
+Thumbs.db
+
+# Local agent/tooling state
+.codex
+.claude/
+
+# Dependency/build output if tooling is added later
+node_modules/
+dist/
+build/
+
+# Logs and local captures
+*.log
+test-results/
+screenshots/current/

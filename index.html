@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jose Gabriel Sierra Ariza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<div id="cursor"></div>
+<div class="grain"></div>
+<div class="scanline"></div>
+
+<div class="page">
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <div class="nav-logo">JSA</div>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="vnav">
+      <span class="menu-label">Menu</span>
+      <span class="menu-lines"><span></span><span></span></span>
+    </button>
+  </nav>
+
+  <!-- VERTICAL NAV OVERLAY -->
+  <div class="vnav" id="vnav" aria-hidden="true">
+    <div class="vnav-curtain"></div>
+    <div class="vnav-inner">
+      <div class="vnav-items" id="vnavItems"></div>
+      <div class="vnav-footer">
+        <div>
+          <div>Jose Gabriel Sierra Ariza</div>
+          <div style="margin-top:6px;opacity:0.5">Software Engineer</div>
+        </div>
+        <a href="https://github.com/JoseStud" class="vnav-footer-email" target="_blank" rel="noreferrer">github.com/JoseStud</a>
+        <div style="text-align:right">
+          <div>AI Automation</div>
+          <div style="margin-top:6px;opacity:0.5">Natural Person Business</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MIDDLE CORNERS -->
+  <div class="corner corner-ml" id="clock">
+    12:00 AM<br>Bogota, CO
+  </div>
+  <div class="corner corner-mr">
+    Active Projects<br>2025 — 2026
+  </div>
+
+  <!-- VERTICAL SIDE TAG -->
+  <div class="side-tag">Software Engineering · AI Automation</div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">JOSE</div>
+  </div>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="scroll-bar" id="scrollBar">
+    <div class="scroll-track" id="scrollTrack"></div>
+    <div class="scroll-pip" id="scrollPip"></div>
+  </div>
+
+  <!-- SCROLL HINT -->
+  <div class="scroll-hint" id="scrollHint">
+    <div class="scroll-hint-line"></div>
+    <span class="scroll-hint-label">Scroll</span>
+  </div>
+
+  <!-- WIPE CURTAIN -->
+  <div class="panel-wipe" id="panelWipe">
+    <div class="wipe-top"></div>
+    <div class="wipe-bot"></div>
+  </div>
+
+  <!-- WORK PANEL -->
+  <div class="panel" id="panel-work" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-work"></div><div class="panel-scroll-pip" id="pip-work"></div></div>
+    <div class="panel-nav">
+      <span class="pn-logo">JSA</span>
+      <span style="font-size:9px;letter-spacing:0.12em;opacity:0.4">Work</span>
+      <button class="panel-close" data-close>Close &nbsp;✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-label">Selected GitHub Projects — Active Systems</div>
+      <div class="work-grid" id="workGrid"></div>
+    </div>
+  </div>
+
+  <!-- STUDIO PANEL -->
+  <div class="panel" id="panel-studio" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-studio"></div><div class="panel-scroll-pip" id="pip-studio"></div></div>
+    <div class="panel-nav">
+      <span class="pn-logo">JSA</span>
+      <span style="font-size:9px;letter-spacing:0.12em;opacity:0.4">Studio</span>
+      <button class="panel-close" data-close>Close &nbsp;✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-label">About the practice</div>
+      <div class="studio-layout">
+        <div class="studio-statement">I build automation systems that turn rough workflows into reliable software.</div>
+        <div class="studio-right">
+          <p class="studio-bio">Jose Gabriel Sierra Ariza is a software engineer and AI automation specialist building full-stack tools, self-hosted infrastructure, and applied AI workflows. Public work spans LoRA/image-generation management, Docker-first application stacks, infrastructure orchestration, and client-side workflow software.</p>
+          <ul class="services-list" id="servicesList"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHIVE PANEL -->
+  <div class="panel" id="panel-archive" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-archive"></div><div class="panel-scroll-pip" id="pip-archive"></div></div>
+    <div class="panel-nav">
+      <span class="pn-logo">JSA</span>
+      <span style="font-size:9px;letter-spacing:0.12em;opacity:0.4">Archive</span>
+      <button class="panel-close" data-close>Close &nbsp;✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="panel-label">Public archive — GitHub repositories</div>
+      <ul class="archive-list" id="archiveList"></ul>
+    </div>
+  </div>
+
+  <!-- CONTACT PANEL -->
+  <div class="panel" id="panel-contact" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
+    <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-contact"></div><div class="panel-scroll-pip" id="pip-contact"></div></div>
+    <div class="panel-nav">
+      <span class="pn-logo">JSA</span>
+      <span style="font-size:9px;letter-spacing:0.12em;opacity:0.4">Let's Talk</span>
+      <button class="panel-close" data-close>Close &nbsp;✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="contact-layout">
+        <div class="contact-heading">Build software.<br>Automate work.<br>Ship systems.</div>
+        <a href="https://github.com/JoseStud" class="contact-email" target="_blank" rel="noreferrer">github.com/JoseStud</a>
+        <div class="contact-details">
+          <span>Jose Gabriel Sierra Ariza</span>
+          <span>Software Engineer</span>
+          <span>AI Automation Specialist</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING OBJECTS -->
+  <div class="objects">
+    <div class="obj obj-diamond"></div>
+    <div class="obj obj-crystal"></div>
+    <div class="obj obj-pill"></div>
+    <div class="obj obj-sphere"></div>
+    <div class="obj obj-gold"></div>
+    <div class="obj obj-card"></div>
+  </div>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-inner" id="marqueeInner"></div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <button class="toggle-wrap" id="toggleWrap" type="button" aria-pressed="false">
+      <span class="sw" id="sw" aria-hidden="true"><span class="sw-knob"></span></span>
+      <span class="toggle-label">Available for systems</span>
+    </button>
+
+    <div class="bottom-center">
+      <span class="globe-icon">◎</span>
+      <span>Software Engineering &nbsp;—&nbsp; AI Automation</span>
+    </div>
+
+    <div class="credit">
+      Jose Gabriel Sierra Ariza &nbsp;◦&nbsp; 2026
+    </div>
+  </div>
+
+</div>
+
+<script src="scripts/site.js"></script>
+</body>
+</html>

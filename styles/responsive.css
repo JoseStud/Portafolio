@@ -1,0 +1,168 @@
+@media (max-width: 700px) {
+  :root {
+    --page-pad-x: 28px;
+    --bottom-bar-height: 54px;
+  }
+
+  nav {
+    padding-top: var(--space-6);
+    right: auto;
+    width: min(390px, 100%);
+  }
+
+  .menu-btn {
+    gap: 10px;
+  }
+
+  .hero-text {
+    font-size: clamp(138px, 38vw, 176px);
+  }
+
+  .corner-mr,
+  .side-tag,
+  .bottom-center,
+  .credit {
+    display: none;
+  }
+
+  .bottom-bar {
+    justify-content: flex-start;
+    right: auto;
+    width: min(390px, 100%);
+  }
+
+  .toggle-wrap {
+    position: static;
+    max-width: 100%;
+  }
+
+  .toggle-label {
+    max-width: calc(100vw - 120px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .marquee {
+    height: 16px;
+    right: auto;
+    width: min(390px, 100%);
+  }
+
+  .marquee-inner {
+    font-size: 6.5px;
+    letter-spacing: 0.24em;
+  }
+
+  .vnav-inner {
+    padding-top: 100px;
+    padding-bottom: var(--space-8);
+    width: min(390px, 100%);
+  }
+
+  .vnav-item-inner {
+    gap: var(--space-3);
+    width: 100%;
+  }
+
+  .vnav-text {
+    font-size: clamp(44px, 15vw, 62px);
+    white-space: normal;
+  }
+
+  .vnav-cat {
+    display: none;
+  }
+
+  .vnav-arrow {
+    font-size: 18px;
+  }
+
+  .vnav-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-3);
+    line-height: 1.6;
+  }
+
+  .vnav-footer > div {
+    text-align: left !important;
+  }
+
+  .panel-nav {
+    gap: var(--space-4);
+    width: min(390px, 100%);
+  }
+
+  .panel-close {
+    padding: 8px 12px;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+  }
+
+  .panel-body {
+    padding-top: var(--space-10);
+    width: min(390px, 100%);
+  }
+
+  .work-grid {
+    grid-template-columns: 1fr;
+    flex: unset;
+  }
+
+  .studio-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .studio-statement {
+    font-size: clamp(44px, 14vw, 58px);
+  }
+
+  .studio-bio {
+    font-size: 12px;
+  }
+
+  .archive-list li {
+    grid-template-columns: 42px 1fr 52px;
+    column-gap: var(--space-3);
+  }
+
+  .archive-name {
+    font-size: 19px;
+    overflow-wrap: anywhere;
+  }
+
+  .archive-cat {
+    display: none;
+  }
+
+  .contact-heading {
+    font-size: clamp(56px, 17vw, 72px);
+  }
+
+  .contact-email {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .contact-details {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+}
+
+@media (max-width: 420px) {
+  .nav-logo {
+    letter-spacing: 0.26em;
+  }
+
+  .menu-label {
+    font-size: 8px;
+  }
+
+  .corner-ml {
+    max-width: 90px;
+  }
+}

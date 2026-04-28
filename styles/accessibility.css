@@ -1,0 +1,35 @@
+/* ACCESSIBILITY */
+:where(a, button, [role="button"], [tabindex]):focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+
+@media (pointer: coarse), (hover: none) {
+  html, body,
+  .nav-logo,
+  .menu-btn,
+  .vnav-item,
+  .vnav-footer-email,
+  .toggle-wrap,
+  .sw,
+  .panel-close,
+  .work-item,
+  .services-list li,
+  .archive-list li,
+  .contact-email {
+    cursor: auto;
+  }
+
+  #cursor {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
