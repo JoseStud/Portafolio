@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  app:
+    image: nginx:1.27-alpine
+    volumes:
+      - /home/ubuntu/beta-site:/usr/share/nginx/html:ro
+    networks:
+      - traefik_proxy
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == app-worker-1
+      update_config:
+        parallelism: 1
+        order: start-first
+      rollback_config:
+        parallelism: 1
+        order: stop-first
+      labels:
+        traefik.enable: "true"
+        traefik.http.routers.alt-beta.entrypoints: websecure
+        traefik.http.routers.alt-beta.rule: Host(`beta.anxiden.dev`)
+        traefik.http.routers.alt-beta.tls: "true"
+        traefik.http.routers.alt-beta.tls.certresolver: letsencrypt
+        traefik.http.services.alt-beta.loadbalancer.server.port: "80"
+
+networks:
+  traefik_proxy:
+    external: true
