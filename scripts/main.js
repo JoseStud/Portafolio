@@ -7,6 +7,9 @@ import { initPinnedNarrative } from './modules/pinned-narrative.js';
 import { initPanelScrollProgress } from './modules/scroll-progress.js';
 import { initToggle } from './modules/toggle.js';
 
+// Browser ES module entrypoint used by development tooling.
+// The production/runtime file loaded by index.html is generated from these
+// modules by tools/build-classic-bundle.mjs so the page can also run from disk.
 renderContent();
 initCursor();
 initPanelScrollProgress();

@@ -2,9 +2,12 @@ import { spawnSync } from "node:child_process";
 import { readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 
+// Syntax-check all maintained JavaScript sources without executing them.
 const roots = ["scripts", "tools"];
 const extensions = new Set([".js", ".mjs", ".cjs"]);
 
+// Recursively collect script files from a root while preserving deterministic
+// directory traversal from the filesystem.
 function collectFiles(dir) {
   const entries = readdirSync(dir, { withFileTypes: true });
   const files = [];
@@ -22,6 +25,8 @@ function collectFiles(dir) {
   return files;
 }
 
+// Missing optional roots should not fail the check; they simply contribute no
+// files. This keeps the script useful during partial refactors.
 const files = roots.flatMap((root) => {
   try {
     if (!statSync(root).isDirectory()) return [];
@@ -38,6 +43,8 @@ if (files.length === 0) {
 
 let failed = false;
 
+// Use the same Node executable that launched this tool so local version
+// behavior matches the rest of the npm scripts.
 for (const file of files) {
   const label = relative(process.cwd(), file);
   const result = spawnSync(process.execPath, ["--check", file], {

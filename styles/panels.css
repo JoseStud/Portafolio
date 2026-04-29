@@ -1,4 +1,6 @@
-/* ── PANELS ── */
+/* PANELS */
+/* Wipe covers the viewport during panel transitions so content can swap while
+   hidden. JavaScript timing in menu-panels.js is aligned to --duration-panel. */
 .panel-wipe {
   position: fixed;
   inset: 0;
@@ -18,6 +20,8 @@
 .panel-wipe.open .wipe-top,
 .panel-wipe.open .wipe-bot { transform: scaleY(1); }
 
+/* Panels remain mounted for transitions and accessibility state. JS toggles
+   .open, aria-hidden, and inert together. */
 .panel {
   position: fixed;
   inset: 0;
@@ -34,7 +38,7 @@
   pointer-events: all;
 }
 
-/* panel nav */
+/* Panel nav. */
 .panel-nav {
   display: flex;
   align-items: center;
@@ -68,7 +72,7 @@
   border-color: rgba(var(--color-fg-rgb), 0.5);
 }
 
-/* panel body */
+/* Panel body. */
 .panel-body {
   flex: 1;
   overflow: hidden;
@@ -76,6 +80,8 @@
   display: flex;
   flex-direction: column;
 }
+
+/* Shared reveal label used by each panel after the wipe opens. */
 .panel-label {
   font-size: 9px;
   letter-spacing: 0.25em;
@@ -88,13 +94,16 @@
 }
 .panel.open .panel-label { opacity: 1; transform: translateY(0); }
 
-/* WORK panel */
+/* WORK panel. */
 .work-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
   flex: 1;
 }
+
+/* Work cards are generated from content-data.js and reveal with staggered
+   delays when the containing panel receives .open. */
 .work-item {
   position: relative;
   background: var(--color-surface);
@@ -164,7 +173,7 @@
 }
 .work-item:hover .work-arrow { opacity: 1; transform: translate(0,0); }
 
-/* STUDIO panel */
+/* STUDIO panel. */
 .studio-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -212,7 +221,7 @@
 .services-list li:hover { color: var(--color-fg); }
 .services-list li span { opacity: 0.3; font-size: 9px; }
 
-/* ARCHIVE panel */
+/* ARCHIVE panel. */
 .archive-list { list-style: none; flex: 1; overflow: auto; }
 .archive-list li {
   display: grid;
@@ -248,7 +257,7 @@
 .panel.open .archive-list li:nth-child(8)  { opacity:1; transform:translateY(0); transition-delay:0.78s; }
 .panel.open .archive-list li:nth-child(9)  { opacity:1; transform:translateY(0); transition-delay:0.82s; }
 
-/* CONTACT panel */
+/* CONTACT panel. */
 .contact-layout {
   flex: 1;
   display: flex;
@@ -295,7 +304,7 @@
 }
 .panel.open .contact-details { opacity: 1; }
 
-/* hero retreat when panel opens */
+/* Hero retreat when any panel or the menu is active. */
 .page.panel-active .hero { 
   transform: scale(0.92);
   opacity: 0;

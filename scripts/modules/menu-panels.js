@@ -1,5 +1,6 @@
 import { resetMainScrollProgress } from './scroll-progress.js';
 
+// Shared focusable query used for focus trapping inside open panels.
 const focusableSelector = [
   'a[href]',
   'button:not([disabled])',
@@ -9,6 +10,8 @@ const focusableSelector = [
   '[tabindex]:not([tabindex="-1"])',
 ].join(', ');
 
+// Coordinates the fullscreen menu, panel transitions, ARIA state, and keyboard
+// focus behavior for the portfolio's modal-style sections.
 export function initMenuPanels() {
   const wipe = document.getElementById('panelWipe');
   const page = document.querySelector('.page');
@@ -22,6 +25,7 @@ export function initMenuPanels() {
   let menuFocusReturn = null;
   let panelFocusReturn = null;
 
+  // Keep visual menu state and accessibility tree state in lockstep.
   const setMenuState = (isOpen) => {
     menuBtn.setAttribute('aria-expanded', String(isOpen));
     menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
@@ -33,6 +37,8 @@ export function initMenuPanels() {
     });
   };
 
+  // `inert` prevents hidden panels from receiving focus or screen-reader
+  // interaction while CSS transitions keep them in the DOM.
   const setPanelState = (panel, isOpen) => {
     panel.setAttribute('aria-hidden', String(!isOpen));
     panel.inert = !isOpen;
@@ -42,6 +48,7 @@ export function initMenuPanels() {
     if (target && document.contains(target)) target.focus();
   };
 
+  // Filter out focusable nodes that are currently hidden by CSS.
   const getFocusable = (container) =>
     [...container.querySelectorAll(focusableSelector)].filter((element) => {
       const style = window.getComputedStyle(element);
@@ -99,9 +106,13 @@ export function initMenuPanels() {
   }
 
   function openPanel(id, trigger) {
+    // When opened from the overlay menu, focus should return to the menu button
+    // because the original nav item will be inert once the menu is closed.
     panelFocusReturn = trigger?.closest('#vnav') ? menuBtn : (trigger || document.activeElement);
     closeMenu({ restore: false });
 
+    // The nested timeouts match the CSS wipe timing: first cover the page, then
+    // switch panel content while covered, then reveal the selected panel.
     setTimeout(() => {
       wipe.classList.add('open');
       page.classList.add('panel-active');
@@ -129,6 +140,8 @@ export function initMenuPanels() {
     wipe.classList.add('open');
     resetMainScrollProgress();
 
+    // Release the active panel after the wipe covers the viewport, then restore
+    // focus to the control that opened the panel.
     setTimeout(() => {
       if (activePanel) {
         activePanel.classList.remove('open');
@@ -142,6 +155,7 @@ export function initMenuPanels() {
     }, 420);
   }
 
+  // Start with all overlays removed from the accessibility tree.
   setMenuState(false);
   document.querySelectorAll('.panel').forEach((panel) => setPanelState(panel, false));
 

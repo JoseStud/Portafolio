@@ -4,8 +4,13 @@
   "use strict";
 
     // scripts/modules/content-data.js
+  // Centralized content registry for the static portfolio.
+  // Keeping repeated labels, project metadata, and generated lists here lets the
+  // markup stay focused on page structure while render-content.js owns insertion.
   const panelIds = ['work', 'studio', 'archive', 'contact'];
 
+  // Main overlay navigation. `panel` must match both `panel-${id}` in index.html
+  // and the scroll progress IDs used by scroll-progress.js.
   const navItems = [
     {
       panel: 'work',
@@ -33,6 +38,8 @@
     },
   ];
 
+  // Featured project cards rendered into the Work panel.
+  // Optional URLs turn cards into external GitHub links.
   const workProjects = [
     {
       number: '001',
@@ -72,6 +79,7 @@
     },
   ];
 
+  // Capability list rendered into the Studio panel.
   const studioServices = [
     { name: 'AI Workflow Automation', number: '01' },
     { name: 'Full-Stack Applications', number: '02' },
@@ -81,6 +89,7 @@
     { name: 'Developer Tooling', number: '06' },
   ];
 
+  // Lightweight archive metadata rendered as the public repository list.
   const archiveItems = [
     { number: '001', name: 'mainpage', category: 'HTML', year: '2026' },
     { number: '002', name: 'piar-digital-app', category: 'TypeScript', year: '2026' },
@@ -93,6 +102,8 @@
     { number: '009', name: 'docker-ente', category: 'Self-hosted stack', year: '2025' },
   ];
 
+  // The marquee repeats terms so the CSS translate animation loops without a
+  // visible empty gap at typical desktop and mobile widths.
   const marqueeItems = [
     'Software Engineering',
     'AI Automation',
@@ -117,11 +128,15 @@
   ];
 
     // scripts/modules/render-content.js
+  // Replace a generated content mount only when the expected node exists.
+  // This keeps the module safe if a section is temporarily removed from HTML.
   const setHtml = (selector, html) => {
     const element = document.querySelector(selector);
     if (element) element.innerHTML = html;
   };
 
+  // All generated labels are escaped before entering template strings. The
+  // current content is static, but this preserves the invariant if copy changes.
   const escapeHtml = (value) =>
     String(value)
       .replaceAll('&', '&amp;')
@@ -130,6 +145,8 @@
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
 
+  // Navigation entries are intentionally rendered as focusable divs because the
+  // menu opens in-page panels instead of navigating to URLs.
   const renderNavItem = ({ panel, number, text, category }) => `
           <div class="vnav-item" data-panel="${escapeHtml(panel)}" role="button" tabindex="0" aria-controls="panel-${escapeHtml(panel)}">
             <div class="vnav-item-inner">
@@ -140,6 +157,8 @@
             </div>
           </div>`;
 
+  // Work cards become anchors when a URL is present and plain blocks otherwise,
+  // letting the data model support both linked and unlinked portfolio items.
   const renderWorkProject = ({ number, title, category, url }) => {
     const tag = url ? 'a' : 'div';
     const attrs = url ? ` href="${escapeHtml(url)}" target="_blank" rel="noreferrer"` : '';
@@ -147,6 +166,8 @@
           <${tag} class="work-item"${attrs}><div class="work-stripe"></div><div class="work-item-inner"><div class="work-num">${escapeHtml(number)}</div><div class="work-title">${escapeHtml(title)}</div><div class="work-cat">${escapeHtml(category)}</div></div><div class="work-arrow">↗</div></${tag}>`;
   };
 
+  // Small list renderers keep the templates colocated with the data shape they
+  // expect, which makes future copy/content additions easier to audit.
   const renderStudioService = ({ name, number }) =>
     `            <li>${escapeHtml(name)} <span>${escapeHtml(number)}</span></li>`;
 
@@ -156,6 +177,8 @@
   const renderMarqueeItems = (items) =>
     items.map((item) => `      <span>${escapeHtml(item)}</span>`).join('<span>·</span>\n');
 
+  // Populate all dynamic islands before interactive modules attach listeners to
+  // the generated controls and links.
   function renderContent() {
     setHtml('#vnavItems', navItems.map(renderNavItem).join('\n'));
     setHtml('#workGrid', workProjects.map(renderWorkProject).join('\n'));
@@ -165,13 +188,19 @@
   }
 
     // scripts/modules/scroll-progress.js
+  // Main page progress nodes are read lazily so regenerated markup or tests can
+  // replace DOM nodes before initialization without stale references.
   const scrollTrack = () => document.getElementById('scrollTrack');
   const scrollPip = () => document.getElementById('scrollPip');
 
+  // Stores the pinned narrative progress while panel scrolling temporarily takes
+  // over the shared progress bar.
   let rememberedMainProgress = 0;
 
   const clampProgress = (pct) => Math.max(0, Math.min(100, pct));
 
+  // Update the fixed right-edge progress indicator. Panel scroll handlers pass
+  // `remember: false` so closing a panel can restore the narrative position.
   function setMainScrollProgress(pct, { remember = true } = {}) {
     const nextProgress = clampProgress(pct);
     if (remember) rememberedMainProgress = nextProgress;
@@ -182,12 +211,16 @@
     if (pip) pip.style.top = `${nextProgress}%`;
   }
 
+  // Wait for the panel wipe transition to finish before restoring the narrative
+  // progress, avoiding a visible jump during the close animation.
   function resetMainScrollProgress() {
     setTimeout(() => {
       setMainScrollProgress(rememberedMainProgress, { remember: false });
     }, 450);
   }
 
+  // Each modal-style panel owns its own internal scroll bar and mirrors that
+  // progress onto the global right-edge indicator while the panel is active.
   function updatePanelScroll(panelId) {
     const panel = document.getElementById(`panel-${panelId}`);
     if (!panel) return;
@@ -208,11 +241,14 @@
     });
   }
 
+  // Register scroll listeners for every known panel ID from content-data.js.
   function initPanelScrollProgress() {
     panelIds.forEach(updatePanelScroll);
   }
 
     // scripts/modules/clock.js
+  // Refreshes the small middle-left clock. It updates every 30 seconds because
+  // seconds are not displayed, keeping DOM writes low while minutes stay current.
   function initClock() {
     const clock = document.getElementById('clock');
     if (!clock) return;
@@ -232,6 +268,8 @@
   }
 
     // scripts/modules/cursor.js
+  // Selectors that should enlarge the custom cursor to signal interactivity.
+  // Keep this list aligned with dynamically rendered content in render-content.js.
   const hoverSelectors = [
     'a',
     '#toggleWrap',
@@ -245,6 +283,8 @@
     '.vnav-footer-email',
   ];
 
+  // Positions the custom cursor and wires hover affordances. The CSS accessibility
+  // file disables this cursor on coarse pointers and touch-first devices.
   function initCursor() {
     const cursor = document.getElementById('cursor');
     if (!cursor) return;
@@ -261,6 +301,9 @@
   }
 
     // scripts/modules/toggle.js
+  // Local availability toggle in the bottom bar. It is intentionally client-only:
+  // the control communicates state visually and through aria-pressed without
+  // persisting anything between page loads.
   function initToggle() {
     const toggle = document.getElementById('toggleWrap');
     const switchElement = document.getElementById('sw');
@@ -273,6 +316,7 @@
   }
 
     // scripts/modules/menu-panels.js
+  // Shared focusable query used for focus trapping inside open panels.
   const focusableSelector = [
     'a[href]',
     'button:not([disabled])',
@@ -282,6 +326,8 @@
     '[tabindex]:not([tabindex="-1"])',
   ].join(', ');
 
+  // Coordinates the fullscreen menu, panel transitions, ARIA state, and keyboard
+  // focus behavior for the portfolio's modal-style sections.
   function initMenuPanels() {
     const wipe = document.getElementById('panelWipe');
     const page = document.querySelector('.page');
@@ -295,6 +341,7 @@
     let menuFocusReturn = null;
     let panelFocusReturn = null;
 
+    // Keep visual menu state and accessibility tree state in lockstep.
     const setMenuState = (isOpen) => {
       menuBtn.setAttribute('aria-expanded', String(isOpen));
       menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
@@ -306,6 +353,8 @@
       });
     };
 
+    // `inert` prevents hidden panels from receiving focus or screen-reader
+    // interaction while CSS transitions keep them in the DOM.
     const setPanelState = (panel, isOpen) => {
       panel.setAttribute('aria-hidden', String(!isOpen));
       panel.inert = !isOpen;
@@ -315,6 +364,7 @@
       if (target && document.contains(target)) target.focus();
     };
 
+    // Filter out focusable nodes that are currently hidden by CSS.
     const getFocusable = (container) =>
       [...container.querySelectorAll(focusableSelector)].filter((element) => {
         const style = window.getComputedStyle(element);
@@ -372,9 +422,13 @@
     }
 
     function openPanel(id, trigger) {
+      // When opened from the overlay menu, focus should return to the menu button
+      // because the original nav item will be inert once the menu is closed.
       panelFocusReturn = trigger?.closest('#vnav') ? menuBtn : (trigger || document.activeElement);
       closeMenu({ restore: false });
 
+      // The nested timeouts match the CSS wipe timing: first cover the page, then
+      // switch panel content while covered, then reveal the selected panel.
       setTimeout(() => {
         wipe.classList.add('open');
         page.classList.add('panel-active');
@@ -402,6 +456,8 @@
       wipe.classList.add('open');
       resetMainScrollProgress();
 
+      // Release the active panel after the wipe covers the viewport, then restore
+      // focus to the control that opened the panel.
       setTimeout(() => {
         if (activePanel) {
           activePanel.classList.remove('open');
@@ -415,6 +471,7 @@
       }, 420);
     }
 
+    // Start with all overlays removed from the accessibility tree.
     setMenuState(false);
     document.querySelectorAll('.panel').forEach((panel) => setPanelState(panel, false));
 
@@ -447,8 +504,12 @@
   }
 
     // scripts/modules/parallax.js
+  // Per-object depth values create a layered parallax field; the fallback below
+  // covers any additional decorative object added to the markup.
   const depths = [0.018, 0.022, 0.014, 0.020, 0.016, 0.012];
 
+  // Moves decorative objects and the hero headline subtly against pointer motion.
+  // The effect is visual only, so the elements remain pointer-events: none in CSS.
   function initParallax() {
     const objects = document.querySelectorAll('.obj');
     const hero = document.querySelector('.hero');
@@ -471,6 +532,8 @@
   }
 
     // scripts/modules/pinned-narrative.js
+  // Interactive targets should keep their native scroll/click behavior instead of
+  // advancing the pinned narrative scenes.
   const interactiveSelector = [
     'a[href]',
     'button',
@@ -492,6 +555,8 @@
     return Boolean(document.querySelector('.vnav.open, .panel.open'));
   }
 
+  // Wheel deltas are reported in pixels, lines, or pages depending on device and
+  // browser. Normalize them to a pixel-like value before converting to progress.
   function normalizeWheelDelta(event) {
     const modeMultiplier = event.deltaMode === 1
       ? 16
@@ -502,6 +567,9 @@
     return event.deltaY * modeMultiplier;
   }
 
+  // Implements the pinned homepage story as a virtual scroll sequence. Instead of
+  // scrolling the document, wheel/touch/keyboard input updates a 0..1 progress
+  // value that drives scene visibility, CSS variables, and the shared progress bar.
   function initPinnedNarrative() {
     const root = document.getElementById('pinnedNarrative');
     const page = document.querySelector('.page');
@@ -516,6 +584,8 @@
     let touchY = null;
     let lastDiscreteStep = 0;
 
+    // Scene index is derived from progress so wheel/touch and keyboard navigation
+    // always converge on the same active scene state.
     const activeSceneIndex = () => Math.round(progress * lastSceneIndex);
 
     const updateScene = () => {
@@ -529,6 +599,8 @@
         scene.setAttribute('aria-hidden', String(!isActive));
       });
 
+      // These custom properties let CSS handle visual interpolation without
+      // duplicating animation state in JavaScript.
       page.style.setProperty('--narrative-progress', progress.toFixed(3));
       page.style.setProperty('--narrative-hero-scale', (1 - progress * 0.08).toFixed(3));
       page.style.setProperty('--narrative-hero-opacity', Math.max(0.04, 1 - progress * 1.8).toFixed(3));
@@ -551,6 +623,8 @@
       setProgress(lastSceneIndex === 0 ? 0 : nextScene / lastSceneIndex);
     };
 
+    // Reduced-motion keyboard/wheel behavior moves scene by scene. The short
+    // throttle prevents high-resolution wheels from skipping multiple sections.
     const stepScene = (direction) => {
       const now = performance.now();
       if (now - lastDiscreteStep < 160) return;
@@ -558,6 +632,8 @@
       setScene(activeSceneIndex() + direction);
     };
 
+    // Only capture global input when the page itself is the interaction target.
+    // Menus, panels, links, and form-like controls must stay in control.
     const canHandleInput = (event) => {
       if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return false;
       if (isOverlayActive()) return false;
@@ -573,6 +649,8 @@
 
       event.preventDefault();
 
+      // Smooth input changes progress continuously unless the user has requested
+      // reduced motion, where discrete scene changes are less disorienting.
       if (reduceMotionQuery.matches) {
         stepScene(Math.sign(delta));
         return;
@@ -630,6 +708,7 @@
       }
     };
 
+    // Initialize ARIA state and CSS variables before binding input listeners.
     updateScene();
 
     window.addEventListener('wheel', onWheel, { passive: false });
@@ -639,6 +718,9 @@
   }
 
     // scripts/main.js
+  // Browser ES module entrypoint used by development tooling.
+  // The production/runtime file loaded by index.html is generated from these
+  // modules by tools/build-classic-bundle.mjs so the page can also run from disk.
   renderContent();
   initCursor();
   initPanelScrollProgress();

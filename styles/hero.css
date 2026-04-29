@@ -1,4 +1,5 @@
 /* HERO */
+/* Hero wordmark sits behind the pinned narrative and decorative objects. */
 .hero {
   position: absolute;
   inset: 0;
@@ -26,6 +27,8 @@
 }
 
 /* CORNER LABELS */
+/* Small editorial labels anchor the viewport and are hidden selectively on
+   mobile in responsive.css. */
 .corner {
   position: absolute;
   z-index: var(--z-content);
@@ -41,6 +44,7 @@
 .corner-mr { top: 50%; right: 52px; text-align: right; transform: translateY(-50%); }
 
 /* VERTICAL SIDE TAG */
+/* Decorative descriptor on the right edge of desktop layouts. */
 .side-tag {
   position: absolute;
   right: 14px;

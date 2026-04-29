@@ -4,20 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jose Gabriel Sierra Ariza</title>
+<!-- External display/body fonts used by the editorial portfolio styling. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<!-- main.css imports the rest of the focused stylesheet modules. -->
 <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
+<!-- Global visual overlays: the cursor is driven by scripts/modules/cursor.js,
+     while grain and scanline are CSS-only texture layers. -->
 <div id="cursor"></div>
 <div class="grain"></div>
 <div class="scanline"></div>
 
 <div class="page">
 
-  <!-- NAV -->
+  <!-- Primary navigation. The button opens the fullscreen vertical menu and
+       keeps aria-expanded synchronized from scripts/modules/menu-panels.js. -->
   <nav id="mainNav">
     <div class="nav-logo">JSA</div>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="vnav">
@@ -26,7 +31,8 @@
     </button>
   </nav>
 
-  <!-- VERTICAL NAV OVERLAY -->
+  <!-- Vertical navigation overlay. Menu items are generated into #vnavItems
+       from scripts/modules/content-data.js so panel labels stay centralized. -->
   <div class="vnav" id="vnav" aria-hidden="true">
     <div class="vnav-curtain"></div>
     <div class="vnav-inner">
@@ -45,7 +51,7 @@
     </div>
   </div>
 
-  <!-- MIDDLE CORNERS -->
+  <!-- Fixed editorial corner labels. #clock is updated client-side. -->
   <div class="corner corner-ml" id="clock">
     12:00 AM<br>Bogota, CO
   </div>
@@ -56,12 +62,14 @@
   <!-- VERTICAL SIDE TAG -->
   <div class="side-tag">Software Engineering · AI Automation</div>
 
-  <!-- HERO -->
+  <!-- Oversized hero wordmark. Pinned narrative progress scales/fades it using
+       CSS variables on .page. -->
   <div class="hero">
     <div class="hero-text">JOSE</div>
   </div>
 
-  <!-- PINNED NARRATIVE -->
+  <!-- Pinned narrative scenes. The data index attributes are the contract with
+       scripts/modules/pinned-narrative.js for virtual scroll progress. -->
   <section class="narrative" id="pinnedNarrative" aria-label="Portfolio narrative" data-narrative-scene="0">
     <article class="narrative-scene narrative-scene-intro" data-narrative-scene-index="0" data-active="true">
       <div class="narrative-meta">Software Engineering / AI Automation</div>
@@ -104,7 +112,8 @@
     </article>
   </section>
 
-  <!-- SCROLL PROGRESS -->
+  <!-- Shared progress indicator. The pinned narrative and open panels both
+       write to these nodes through scripts/modules/scroll-progress.js. -->
   <div class="scroll-bar" id="scrollBar">
     <div class="scroll-track" id="scrollTrack"></div>
     <div class="scroll-pip" id="scrollPip"></div>
@@ -116,13 +125,13 @@
     <span class="scroll-hint-label">Scroll</span>
   </div>
 
-  <!-- WIPE CURTAIN -->
+  <!-- Fullscreen transition curtain used when opening or closing panels. -->
   <div class="panel-wipe" id="panelWipe">
     <div class="wipe-top"></div>
     <div class="wipe-bot"></div>
   </div>
 
-  <!-- WORK PANEL -->
+  <!-- Work panel. Dynamic project cards are rendered into #workGrid. -->
   <div class="panel" id="panel-work" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-work"></div><div class="panel-scroll-pip" id="pip-work"></div></div>
     <div class="panel-nav">
@@ -136,7 +145,7 @@
     </div>
   </div>
 
-  <!-- STUDIO PANEL -->
+  <!-- Studio panel. Service rows are rendered into #servicesList. -->
   <div class="panel" id="panel-studio" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-studio"></div><div class="panel-scroll-pip" id="pip-studio"></div></div>
     <div class="panel-nav">
@@ -156,7 +165,7 @@
     </div>
   </div>
 
-  <!-- ARCHIVE PANEL -->
+  <!-- Archive panel. Repository rows are rendered into #archiveList. -->
   <div class="panel" id="panel-archive" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-archive"></div><div class="panel-scroll-pip" id="pip-archive"></div></div>
     <div class="panel-nav">
@@ -170,7 +179,8 @@
     </div>
   </div>
 
-  <!-- CONTACT PANEL -->
+  <!-- Contact panel. Static CTA content uses the same panel/focus lifecycle as
+       generated panels for a consistent keyboard model. -->
   <div class="panel" id="panel-contact" role="dialog" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="panel-scroll-bar"><div class="panel-scroll-fill" id="fill-contact"></div><div class="panel-scroll-pip" id="pip-contact"></div></div>
     <div class="panel-nav">
@@ -191,7 +201,8 @@
     </div>
   </div>
 
-  <!-- FLOATING OBJECTS -->
+  <!-- Floating decorative objects. CSS draws their shapes; parallax.js adjusts
+       position on pointer movement. -->
   <div class="objects">
     <div class="obj obj-diamond"></div>
     <div class="obj obj-crystal"></div>
@@ -201,12 +212,13 @@
     <div class="obj obj-card"></div>
   </div>
 
-  <!-- MARQUEE -->
+  <!-- Marquee text is rendered from content-data.js so repeated terms can be
+       tuned without changing the HTML shell. -->
   <div class="marquee">
     <div class="marquee-inner" id="marqueeInner"></div>
   </div>
 
-  <!-- BOTTOM BAR -->
+  <!-- Bottom utility bar with a client-only availability toggle. -->
   <div class="bottom-bar">
     <button class="toggle-wrap" id="toggleWrap" type="button" aria-pressed="false">
       <span class="sw" id="sw" aria-hidden="true"><span class="sw-knob"></span></span>
@@ -225,6 +237,8 @@
 
 </div>
 
+<!-- Generated classic bundle. Edit scripts/main.js or scripts/modules/*.js,
+     then run npm run build:scripts to update this file. -->
 <script src="scripts/site.js"></script>
 </body>
 </html>
