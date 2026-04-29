@@ -89,6 +89,27 @@
   font-size: clamp(56px, 8vw, 128px);
 }
 
+.reveal-underline {
+  display: inline;
+  white-space: normal;
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 0.03em);
+  background-size: 0% 0.055em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size var(--duration-reveal) var(--ease-reveal);
+  transition-delay: var(--underline-delay, 0s);
+}
+
+.reveal-underline::after {
+  content: none;
+}
+
+.narrative-scene[data-active="true"] .reveal-underline::after {
+  transform: scaleX(1);
+}
+
 .narrative-copy {
   max-width: 620px;
   margin-top: var(--space-6);
@@ -275,7 +296,9 @@
   .narrative-scene,
   .objects,
   .narrative-link,
+  .reveal-underline::after,
   .narrative::before {
-    transition-duration: var(--duration-instant) !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
   }
 }

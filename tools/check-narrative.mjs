@@ -26,7 +26,12 @@ const requiredChecks = [
   ["narrative process counters use high contrast color", files.narrativeCss.includes("color: rgba(var(--color-fg-rgb), 0.7);")],
   ["narrative feature titles wrap long project names", files.narrativeCss.includes("overflow-wrap: anywhere;")],
   ["narrative progress fades hero text behind content", files.pinnedJs.includes("Math.max(0.04, 1 - progress * 1.8)")],
-  ["narrative progress fades objects behind content", files.pinnedJs.includes("Math.max(0.12, 1 - progress * 1.05)")]
+  ["narrative progress fades objects behind content", files.pinnedJs.includes("Math.max(0.12, 1 - progress * 1.05)")],
+  ["narrative markup wraps emphasized keywords", files.html.includes('class="reveal-underline"') && files.html.includes('>software<') && files.html.includes('>AI Workflow Automation<') && files.html.includes('>LoRA Manager<')],
+  ["narrative underline CSS defines reveal base", files.narrativeCss.includes(".reveal-underline::after") && files.narrativeCss.includes("transform: scaleX(0);")],
+  ["narrative underline reveals in active scenes", files.narrativeCss.includes('.narrative-scene[data-active="true"] .reveal-underline::after') && files.narrativeCss.includes("transform: scaleX(1);")],
+  ["narrative underline supports stagger delay", files.narrativeCss.includes("--underline-delay") && files.narrativeCss.includes("transition-delay: var(--underline-delay, 0s);")],
+  ["narrative underline respects reduced motion", files.narrativeCss.includes(".reveal-underline::after") && files.narrativeCss.includes("transition-duration: var(--duration-instant) !important;")]
 ];
 
 const failures = requiredChecks
