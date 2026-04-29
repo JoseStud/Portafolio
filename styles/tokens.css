@@ -1,4 +1,6 @@
 :root {
+  /* Core palette shared across all visual modules. RGB triplets are used where
+     alpha compositing is needed in rgba() declarations. */
   --color-bg: #060606;
   --color-fg: #f0ede8;
   --color-surface: #0e0e0e;
@@ -10,10 +12,14 @@
   --color-black-rgb: 0, 0, 0;
   --color-white-rgb: 255, 255, 255;
 
+  /* Typography tokens keep the editorial display face and mono UI face
+     consistent across generated and static sections. */
   --font-body: 'Space Mono', monospace;
   --font-display: 'Bebas Neue', sans-serif;
   --font-card: Georgia, serif;
 
+  /* Spacing scale and major layout dimensions. Component files should prefer
+     these tokens over one-off values when the spacing participates in layout. */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -31,6 +37,8 @@
   --bottom-bar-height: 46px;
   --pill-radius: 99px;
 
+  /* Motion tokens centralize timing so JS transition delays can line up with
+     CSS wipes, reveals, and scroll indicators. */
   --duration-instant: 0.01s;
   --duration-quick: 0.08s;
   --duration-fast: 0.1s;
@@ -45,6 +53,8 @@
   --ease-switch: cubic-bezier(0.4,0,0.2,1);
   --ease-scroll: cubic-bezier(0.4,0,0.6,1);
 
+  /* Z-index ladder. tools/check-layering.mjs verifies the critical overlay
+     ordering between nav, vertical menu, panels, and panel wipes. */
   --z-underlay: 2;
   --z-hero: 5;
   --z-objects: 8;
@@ -60,6 +70,7 @@
   --z-scroll: 300;
   --z-cursor: 9999;
 
+  /* Shared focus styling for keyboard-visible interactive elements. */
   --focus-ring: 2px solid var(--color-fg);
   --focus-offset: 4px;
 }

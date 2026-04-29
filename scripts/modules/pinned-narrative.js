@@ -1,5 +1,7 @@
 import { setMainScrollProgress } from './scroll-progress.js';
 
+// Interactive targets should keep their native scroll/click behavior instead of
+// advancing the pinned narrative scenes.
 const interactiveSelector = [
   'a[href]',
   'button',
@@ -21,6 +23,8 @@ function isOverlayActive() {
   return Boolean(document.querySelector('.vnav.open, .panel.open'));
 }
 
+// Wheel deltas are reported in pixels, lines, or pages depending on device and
+// browser. Normalize them to a pixel-like value before converting to progress.
 function normalizeWheelDelta(event) {
   const modeMultiplier = event.deltaMode === 1
     ? 16
@@ -31,6 +35,9 @@ function normalizeWheelDelta(event) {
   return event.deltaY * modeMultiplier;
 }
 
+// Implements the pinned homepage story as a virtual scroll sequence. Instead of
+// scrolling the document, wheel/touch/keyboard input updates a 0..1 progress
+// value that drives scene visibility, CSS variables, and the shared progress bar.
 export function initPinnedNarrative() {
   const root = document.getElementById('pinnedNarrative');
   const page = document.querySelector('.page');
@@ -45,6 +52,8 @@ export function initPinnedNarrative() {
   let touchY = null;
   let lastDiscreteStep = 0;
 
+  // Scene index is derived from progress so wheel/touch and keyboard navigation
+  // always converge on the same active scene state.
   const activeSceneIndex = () => Math.round(progress * lastSceneIndex);
 
   const updateScene = () => {
@@ -58,6 +67,8 @@ export function initPinnedNarrative() {
       scene.setAttribute('aria-hidden', String(!isActive));
     });
 
+    // These custom properties let CSS handle visual interpolation without
+    // duplicating animation state in JavaScript.
     page.style.setProperty('--narrative-progress', progress.toFixed(3));
     page.style.setProperty('--narrative-hero-scale', (1 - progress * 0.08).toFixed(3));
     page.style.setProperty('--narrative-hero-opacity', Math.max(0.04, 1 - progress * 1.8).toFixed(3));
@@ -80,6 +91,8 @@ export function initPinnedNarrative() {
     setProgress(lastSceneIndex === 0 ? 0 : nextScene / lastSceneIndex);
   };
 
+  // Reduced-motion keyboard/wheel behavior moves scene by scene. The short
+  // throttle prevents high-resolution wheels from skipping multiple sections.
   const stepScene = (direction) => {
     const now = performance.now();
     if (now - lastDiscreteStep < 160) return;
@@ -87,6 +100,8 @@ export function initPinnedNarrative() {
     setScene(activeSceneIndex() + direction);
   };
 
+  // Only capture global input when the page itself is the interaction target.
+  // Menus, panels, links, and form-like controls must stay in control.
   const canHandleInput = (event) => {
     if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return false;
     if (isOverlayActive()) return false;
@@ -102,6 +117,8 @@ export function initPinnedNarrative() {
 
     event.preventDefault();
 
+    // Smooth input changes progress continuously unless the user has requested
+    // reduced motion, where discrete scene changes are less disorienting.
     if (reduceMotionQuery.matches) {
       stepScene(Math.sign(delta));
       return;
@@ -159,6 +176,7 @@ export function initPinnedNarrative() {
     }
   };
 
+  // Initialize ARIA state and CSS variables before binding input listeners.
   updateScene();
 
   window.addEventListener('wheel', onWheel, { passive: false });

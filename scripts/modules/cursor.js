@@ -1,3 +1,5 @@
+// Selectors that should enlarge the custom cursor to signal interactivity.
+// Keep this list aligned with dynamically rendered content in render-content.js.
 const hoverSelectors = [
   'a',
   '#toggleWrap',
@@ -11,6 +13,8 @@ const hoverSelectors = [
   '.vnav-footer-email',
 ];
 
+// Positions the custom cursor and wires hover affordances. The CSS accessibility
+// file disables this cursor on coarse pointers and touch-first devices.
 export function initCursor() {
   const cursor = document.getElementById('cursor');
   if (!cursor) return;

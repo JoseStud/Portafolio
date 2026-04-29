@@ -1,5 +1,8 @@
 import { readFileSync } from "node:fs";
 
+// Read the source and generated files that make up the pinned narrative system.
+// These checks are string-based because they validate integration contracts,
+// not runtime browser behavior.
 const files = {
   html: readFileSync("index.html", "utf8"),
   narrativeCss: readFileSync("styles/narrative.css", "utf8"),
@@ -10,6 +13,9 @@ const files = {
   packageJson: readFileSync("package.json", "utf8")
 };
 
+// Each tuple is [human-readable failure message, boolean condition].
+// The list intentionally covers markup hooks, CSS imports, JS initialization,
+// generated bundle inclusion, and contrast/motion details.
 const requiredChecks = [
   ["index.html contains narrative root", files.html.includes('id="pinnedNarrative"')],
   ["index.html contains six narrative scenes", (files.html.match(/class="narrative-scene/g) || []).length === 6],
@@ -28,12 +34,14 @@ const requiredChecks = [
   ["narrative progress fades hero text behind content", files.pinnedJs.includes("Math.max(0.04, 1 - progress * 1.8)")],
   ["narrative progress fades objects behind content", files.pinnedJs.includes("Math.max(0.12, 1 - progress * 1.05)")],
   ["narrative markup wraps emphasized keywords", files.html.includes('class="reveal-underline"') && files.html.includes('>software<') && files.html.includes('>AI Workflow Automation<') && files.html.includes('>LoRA Manager<')],
-  ["narrative underline CSS defines reveal base", files.narrativeCss.includes(".reveal-underline::after") && files.narrativeCss.includes("transform: scaleX(0);")],
-  ["narrative underline reveals in active scenes", files.narrativeCss.includes('.narrative-scene[data-active="true"] .reveal-underline::after') && files.narrativeCss.includes("transform: scaleX(1);")],
+  ["narrative underline CSS defines reveal base", files.narrativeCss.includes(".reveal-underline") && files.narrativeCss.includes("background-size: 0% 0.055em;")],
+  ["narrative underline reveals in active scenes", files.narrativeCss.includes('.narrative-scene[data-active="true"] .reveal-underline') && files.narrativeCss.includes("background-size: 100% 0.055em;")],
   ["narrative underline supports stagger delay", files.narrativeCss.includes("--underline-delay") && files.narrativeCss.includes("transition-delay: var(--underline-delay, 0s);")],
-  ["narrative underline respects reduced motion", files.narrativeCss.includes(".reveal-underline::after") && files.narrativeCss.includes("transition-duration: var(--duration-instant) !important;")]
+  ["narrative underline respects reduced motion", files.narrativeCss.includes(".reveal-underline") && files.narrativeCss.includes("transition-duration: 0s !important;")]
 ];
 
+// Print every failed contract at once so maintainers can fix related omissions
+// in a single edit instead of rerunning for one failure at a time.
 const failures = requiredChecks
   .filter(([, passed]) => !passed)
   .map(([message]) => `failed ${message}`);

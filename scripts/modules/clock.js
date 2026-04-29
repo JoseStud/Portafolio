@@ -1,3 +1,5 @@
+// Refreshes the small middle-left clock. It updates every 30 seconds because
+// seconds are not displayed, keeping DOM writes low while minutes stay current.
 export function initClock() {
   const clock = document.getElementById('clock');
   if (!clock) return;

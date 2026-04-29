@@ -10,6 +10,7 @@ RECORD_CONTENT = "anxiden.dev"
 
 
 def gateway_env():
+    """Read the Traefik service environment without prompting for sudo."""
     return subprocess.check_output(
         [
             "sudo",
@@ -26,6 +27,7 @@ def gateway_env():
 
 
 def cloudflare_token():
+    """Reuse the Cloudflare token already mounted into the Traefik gateway."""
     for line in gateway_env().splitlines():
         if line.startswith("CF_DNS_API_TOKEN="):
             return line.split("=", 1)[1].strip()
@@ -33,6 +35,7 @@ def cloudflare_token():
 
 
 def api(token, method, path, payload=None):
+    """Call the Cloudflare v4 API and return the decoded JSON response."""
     data = None if payload is None else json.dumps(payload).encode("utf-8")
     request = urllib.request.Request(
         "https://api.cloudflare.com/client/v4" + path,
@@ -47,6 +50,7 @@ def api(token, method, path, payload=None):
 
 
 def main():
+    """Create or update beta.anxiden.dev as a proxied CNAME."""
     token = cloudflare_token()
     zone = api(token, "GET", "/zones?name=" + urllib.parse.quote(ZONE_NAME))
     if not zone.get("success") or not zone.get("result"):
@@ -59,6 +63,7 @@ def main():
         "/zones/" + zone_id + "/dns_records?name=" + urllib.parse.quote(RECORD_NAME),
     )
     payload = {
+        # ttl=1 tells Cloudflare to use automatic TTL for proxied records.
         "type": "CNAME",
         "name": "beta",
         "content": RECORD_CONTENT,
@@ -68,6 +73,8 @@ def main():
 
     if records.get("result"):
         current = records["result"][0]
+        # Avoid replacing a non-CNAME record automatically because that may
+        # hide a deliberately different beta-site routing strategy.
         if current.get("type") != "CNAME":
             raise SystemExit(
                 "Existing beta record is "

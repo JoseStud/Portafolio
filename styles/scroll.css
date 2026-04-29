@@ -1,4 +1,6 @@
-/* ── CUSTOM SCROLLBAR ── */
+/* CUSTOM SCROLLBAR */
+/* Native scrollbar styling only appears inside scrollable panels because the
+   main document itself is viewport-locked. */
 ::-webkit-scrollbar { width: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
@@ -8,7 +10,9 @@
 }
 ::-webkit-scrollbar-thumb:hover { background: rgba(var(--color-fg-rgb), 0.5); }
 
-/* ── SCROLL PROGRESS BAR ── */
+/* SCROLL PROGRESS BAR */
+/* Shared right-edge indicator: pinned narrative writes scene progress, and open
+   panels temporarily mirror their internal scroll position here. */
 .scroll-bar {
   position: fixed;
   right: 0; top: 0;
@@ -38,7 +42,8 @@
   box-shadow: 0 0 8px rgba(var(--color-fg-rgb), 0.6);
 }
 
-/* ── SCROLL HINT (hero) ── */
+/* SCROLL HINT (hero) */
+/* Opening affordance fades out as narrative progress advances. */
 .scroll-hint {
   position: absolute;
   bottom: 56px;
@@ -83,10 +88,11 @@
   100% { top: 100%;  opacity: 0; }
 }
 
-/* panel body scrollable */
+/* Panel body scrollable. */
 .panel-body { overflow-y: auto; }
 
-/* ── PANEL SCROLL INDICATOR ── */
+/* PANEL SCROLL INDICATOR */
+/* Per-panel progress rails are updated by scroll-progress.js. */
 .panel-scroll-bar {
   position: absolute;
   right: var(--space-5); top: 70px; bottom: var(--bottom-bar-height);

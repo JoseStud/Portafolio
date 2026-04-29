@@ -1,4 +1,6 @@
 /* CUSTOM CURSOR */
+/* Fixed dot follows pointer coordinates from cursor.js and expands over
+   known interactive targets. */
 #cursor {
   position: fixed;
   width: 8px; height: 8px;

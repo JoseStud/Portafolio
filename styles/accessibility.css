@@ -1,9 +1,13 @@
 /* ACCESSIBILITY */
+/* Keyboard users get an explicit outline even though much of the UI uses
+   custom cursor and low-contrast editorial styling. */
 :where(a, button, [role="button"], [tabindex]):focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
 }
 
+/* Touch and coarse-pointer devices use the system cursor model. The custom
+   cursor is hidden because there is no hover target to track. */
 @media (pointer: coarse), (hover: none) {
   html, body,
   .nav-logo,
@@ -25,6 +29,8 @@
   }
 }
 
+/* Honor reduced motion globally, with feature files adding extra local
+   safeguards where state transitions need specific timing. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     scroll-behavior: auto !important;

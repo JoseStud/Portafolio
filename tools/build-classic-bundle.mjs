@@ -1,6 +1,8 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 
+// Source order matters because this script strips ESM syntax and concatenates
+// the modules into one classic IIFE for direct file:// browser usage.
 const orderedSources = [
   "scripts/modules/content-data.js",
   "scripts/modules/render-content.js",
@@ -16,6 +18,8 @@ const orderedSources = [
 
 const outputPath = resolve("scripts/site.js");
 
+// Drop static import declarations after dependency order has already been
+// encoded above. Handles both one-line and multiline import blocks.
 function stripImports(source) {
   const lines = source.split("\n");
   const kept = [];
@@ -39,6 +43,7 @@ function stripImports(source) {
   return kept.join("\n");
 }
 
+// Convert exported declarations into local declarations inside the IIFE.
 function toClassicScript(path) {
   const source = readFileSync(path, "utf8");
   return stripImports(source)
@@ -46,6 +51,7 @@ function toClassicScript(path) {
     .trim();
 }
 
+// Indent bundled source so scripts/site.js remains readable in browser devtools.
 function indentSource(source) {
   return source
     .split("\n")
@@ -53,6 +59,8 @@ function indentSource(source) {
     .join("\n");
 }
 
+// Preserve source-file boundary comments in the generated bundle to make
+// debugging easier when the site is opened without a dev server.
 const body = indentSource(
   orderedSources
     .map((path) => `  // ${path}\n${toClassicScript(path)}`)

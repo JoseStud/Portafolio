@@ -1,5 +1,9 @@
+// Per-object depth values create a layered parallax field; the fallback below
+// covers any additional decorative object added to the markup.
 const depths = [0.018, 0.022, 0.014, 0.020, 0.016, 0.012];
 
+// Moves decorative objects and the hero headline subtly against pointer motion.
+// The effect is visual only, so the elements remain pointer-events: none in CSS.
 export function initParallax() {
   const objects = document.querySelectorAll('.obj');
   const hero = document.querySelector('.hero');

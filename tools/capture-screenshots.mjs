@@ -3,6 +3,7 @@ import { spawnSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { join, resolve } from "node:path";
 
+// Prefer an explicit CHROMIUM path, then common Linux/Chrome command names.
 const chromiumCommands = [
   process.env.CHROMIUM,
   "chromium",
@@ -11,11 +12,15 @@ const chromiumCommands = [
   "google-chrome-stable"
 ].filter(Boolean);
 
+// Reference dimensions for regression screenshots. Mobile matches the narrow
+// 390px layout constraint used throughout responsive.css.
 const viewports = [
   { name: "desktop", size: "1440,1000" },
   { name: "mobile", size: "390,844" }
 ];
 
+// Find the first runnable browser command and fail with setup guidance if none
+// is available on the machine.
 function findChromium() {
   for (const command of chromiumCommands) {
     const result = spawnSync(command, ["--version"], { encoding: "utf8" });
@@ -34,6 +39,8 @@ mkdirSync(outputDir, { recursive: true });
 const chromium = findChromium();
 const url = pathToFileURL(resolve("index.html")).href;
 
+// Capture index.html directly through file:// to verify the generated classic
+// bundle works without relying on Vite or any other dev server.
 for (const viewport of viewports) {
   const outputPath = join(outputDir, `${viewport.name}.png`);
   const args = [

@@ -1,5 +1,8 @@
+/* Global reset keeps the single-viewport composition predictable. */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* The experience is intentionally viewport-locked. Narrative progress is
+   handled by JavaScript instead of native document scrolling. */
 html, body {
   width: 100vw;
   height: 100vh;

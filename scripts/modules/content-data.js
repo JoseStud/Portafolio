@@ -1,5 +1,10 @@
+// Centralized content registry for the static portfolio.
+// Keeping repeated labels, project metadata, and generated lists here lets the
+// markup stay focused on page structure while render-content.js owns insertion.
 export const panelIds = ['work', 'studio', 'archive', 'contact'];
 
+// Main overlay navigation. `panel` must match both `panel-${id}` in index.html
+// and the scroll progress IDs used by scroll-progress.js.
 export const navItems = [
   {
     panel: 'work',
@@ -27,6 +32,8 @@ export const navItems = [
   },
 ];
 
+// Featured project cards rendered into the Work panel.
+// Optional URLs turn cards into external GitHub links.
 export const workProjects = [
   {
     number: '001',
@@ -66,6 +73,7 @@ export const workProjects = [
   },
 ];
 
+// Capability list rendered into the Studio panel.
 export const studioServices = [
   { name: 'AI Workflow Automation', number: '01' },
   { name: 'Full-Stack Applications', number: '02' },
@@ -75,6 +83,7 @@ export const studioServices = [
   { name: 'Developer Tooling', number: '06' },
 ];
 
+// Lightweight archive metadata rendered as the public repository list.
 export const archiveItems = [
   { number: '001', name: 'mainpage', category: 'HTML', year: '2026' },
   { number: '002', name: 'piar-digital-app', category: 'TypeScript', year: '2026' },
@@ -87,6 +96,8 @@ export const archiveItems = [
   { number: '009', name: 'docker-ente', category: 'Self-hosted stack', year: '2025' },
 ];
 
+// The marquee repeats terms so the CSS translate animation loops without a
+// visible empty gap at typical desktop and mobile widths.
 export const marqueeItems = [
   'Software Engineering',
   'AI Automation',

@@ -1,3 +1,6 @@
+/* Stylesheet manifest.
+   Keep imports in dependency order: tokens first, shared base styles next,
+   feature modules after the variables they consume, responsive overrides last. */
 @import url('./tokens.css');
 @import url('./base.css');
 @import url('./cursor.css');

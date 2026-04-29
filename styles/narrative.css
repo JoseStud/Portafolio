@@ -1,4 +1,6 @@
-/* ── PINNED HOMEPAGE NARRATIVE ── */
+/* PINNED HOMEPAGE NARRATIVE */
+/* JS writes these variables as virtual scroll progresses from scene 0 to the
+   final contact scene. Defaults keep the first paint readable before JS runs. */
 .page {
   --narrative-progress: 0;
   --narrative-hero-scale: 1;
@@ -15,6 +17,8 @@
   overflow: hidden;
 }
 
+/* Progress-driven scrim increases contrast as text-heavy scenes replace the
+   opening hero composition. */
 .narrative::before {
   content: '';
   position: absolute;
@@ -27,6 +31,8 @@
   transition: opacity var(--duration-reveal) ease;
 }
 
+/* Each scene is stacked in the same viewport position. JS toggles data-active
+   and aria-hidden so only one scene is visually and semantically active. */
 .narrative-scene {
   position: absolute;
   inset: 0;
@@ -52,6 +58,8 @@
   transition-delay: 0s;
 }
 
+/* Intro scene anchors its metadata near the bottom, preserving the initial
+   hero-wordmark composition before deeper narrative scenes appear. */
 .narrative-scene-intro {
   align-content: end;
 }
@@ -89,6 +97,7 @@
   font-size: clamp(56px, 8vw, 128px);
 }
 
+/* Underline reveal is used sparingly for key words in active scenes. */
 .reveal-underline {
   display: inline;
   white-space: normal;
@@ -102,12 +111,8 @@
   transition-delay: var(--underline-delay, 0s);
 }
 
-.reveal-underline::after {
-  content: none;
-}
-
-.narrative-scene[data-active="true"] .reveal-underline::after {
-  transform: scaleX(1);
+.narrative-scene[data-active="true"] .reveal-underline {
+  background-size: 100% 0.055em;
 }
 
 .narrative-copy {
@@ -136,6 +141,8 @@
   color: rgba(var(--color-fg-rgb), 0.96);
 }
 
+/* Feature/process grids use opaque cells over the progress scrim to maintain
+   contrast even while decorative objects are still faintly visible. */
 .feature-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -227,11 +234,14 @@
   border-color: rgba(var(--color-fg-rgb), 0.55);
 }
 
+/* Reuse the global object layer opacity as the narrative advances. */
 .objects {
   opacity: var(--narrative-object-opacity, 1);
   transition: opacity var(--duration-reveal) ease;
 }
 
+/* Mobile narrative layout is capped to the same narrow width as the rest of the
+   mobile page chrome to avoid text colliding with hidden desktop affordances. */
 @media (max-width: 700px) {
   .narrative-scene {
     width: min(390px, 100%);
@@ -292,11 +302,13 @@
   }
 }
 
+/* Local reduced-motion overrides keep scene changes immediate even if the
+   global accessibility rule misses a nested transition. */
 @media (prefers-reduced-motion: reduce) {
   .narrative-scene,
   .objects,
   .narrative-link,
-  .reveal-underline::after,
+  .reveal-underline,
   .narrative::before {
     transition-duration: 0s !important;
     transition-delay: 0s !important;
