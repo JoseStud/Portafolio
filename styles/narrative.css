@@ -89,6 +89,30 @@
   font-size: clamp(56px, 8vw, 128px);
 }
 
+.reveal-underline {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.reveal-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.03em;
+  height: 0.055em;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-reveal) var(--ease-reveal);
+  transition-delay: var(--underline-delay, 0s);
+}
+
+.narrative-scene[data-active="true"] .reveal-underline::after {
+  transform: scaleX(1);
+}
+
 .narrative-copy {
   max-width: 620px;
   margin-top: var(--space-6);
@@ -275,7 +299,9 @@
   .narrative-scene,
   .objects,
   .narrative-link,
+  .reveal-underline::after,
   .narrative::before {
     transition-duration: var(--duration-instant) !important;
+    transition-delay: 0s !important;
   }
 }
