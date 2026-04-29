@@ -172,7 +172,7 @@
 
 .narrative-link {
   display: inline-block;
-  margin-top: var(--space-7, 28px);
+  margin-top: var(--space-8);
   border-bottom: 1px solid rgba(var(--color-fg-rgb), 0.25);
   color: rgba(var(--color-fg-rgb), 0.62);
   font-size: 14px;

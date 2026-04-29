@@ -3,12 +3,23 @@ import { panelIds } from './content-data.js';
 const scrollTrack = () => document.getElementById('scrollTrack');
 const scrollPip = () => document.getElementById('scrollPip');
 
+let rememberedMainProgress = 0;
+
+const clampProgress = (pct) => Math.max(0, Math.min(100, pct));
+
+export function setMainScrollProgress(pct, { remember = true } = {}) {
+  const nextProgress = clampProgress(pct);
+  if (remember) rememberedMainProgress = nextProgress;
+
+  const track = scrollTrack();
+  const pip = scrollPip();
+  if (track) track.style.height = `${nextProgress}%`;
+  if (pip) pip.style.top = `${nextProgress}%`;
+}
+
 export function resetMainScrollProgress() {
   setTimeout(() => {
-    const track = scrollTrack();
-    const pip = scrollPip();
-    if (track) track.style.height = '0%';
-    if (pip) pip.style.top = '0%';
+    setMainScrollProgress(rememberedMainProgress, { remember: false });
   }, 450);
 }
 
@@ -28,10 +39,7 @@ function updatePanelScroll(panelId) {
     fill.style.height = `${pct}%`;
     pip.style.top = `${pct}%`;
 
-    const track = scrollTrack();
-    const mainPip = scrollPip();
-    if (track) track.style.height = `${pct}%`;
-    if (mainPip) mainPip.style.top = `${pct}%`;
+    setMainScrollProgress(pct, { remember: false });
   });
 }
 

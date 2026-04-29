@@ -10,6 +10,7 @@ const orderedSources = [
   "scripts/modules/toggle.js",
   "scripts/modules/menu-panels.js",
   "scripts/modules/parallax.js",
+  "scripts/modules/pinned-narrative.js",
   "scripts/main.js"
 ];
 
