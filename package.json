@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build:scripts": "node tools/build-classic-bundle.mjs",
-    "check": "npm run build:scripts && node tools/check-js.mjs && node tools/check-layering.mjs",
+    "check": "npm run build:scripts && node tools/check-js.mjs && node tools/check-layering.mjs && node tools/check-narrative.mjs",
     "serve": "node tools/serve-static.mjs",
     "screenshots": "npm run build:scripts && node tools/capture-screenshots.mjs",
     "verify": "npm run check && npm run screenshots"
