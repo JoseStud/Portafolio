@@ -301,7 +301,7 @@
   .narrative-link,
   .reveal-underline::after,
   .narrative::before {
-    transition-duration: var(--duration-instant) !important;
+    transition-duration: 0s !important;
     transition-delay: 0s !important;
   }
 }
