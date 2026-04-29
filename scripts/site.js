@@ -5,7 +5,7 @@
 
     // scripts/modules/content-data.js
   const panelIds = ['work', 'studio', 'archive', 'contact'];
-  
+
   const navItems = [
     {
       panel: 'work',
@@ -32,7 +32,7 @@
       category: 'GitHub',
     },
   ];
-  
+
   const workProjects = [
     {
       number: '001',
@@ -71,7 +71,7 @@
       url: 'https://github.com/JoseStud/docker-ente',
     },
   ];
-  
+
   const studioServices = [
     { name: 'AI Workflow Automation', number: '01' },
     { name: 'Full-Stack Applications', number: '02' },
@@ -80,7 +80,7 @@
     { name: 'Dockerized Self-Hosting', number: '05' },
     { name: 'Developer Tooling', number: '06' },
   ];
-  
+
   const archiveItems = [
     { number: '001', name: 'mainpage', category: 'HTML', year: '2026' },
     { number: '002', name: 'piar-digital-app', category: 'TypeScript', year: '2026' },
@@ -92,7 +92,7 @@
     { number: '008', name: 'SebasColab', category: 'Prototype', year: '2025' },
     { number: '009', name: 'docker-ente', category: 'Self-hosted stack', year: '2025' },
   ];
-  
+
   const marqueeItems = [
     'Software Engineering',
     'AI Automation',
@@ -115,13 +115,13 @@
     'Terraform',
     'Ansible',
   ];
-  
+
     // scripts/modules/render-content.js
   const setHtml = (selector, html) => {
     const element = document.querySelector(selector);
     if (element) element.innerHTML = html;
   };
-  
+
   const escapeHtml = (value) =>
     String(value)
       .replaceAll('&', '&amp;')
@@ -129,7 +129,7 @@
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
-  
+
   const renderNavItem = ({ panel, number, text, category }) => `
           <div class="vnav-item" data-panel="${escapeHtml(panel)}" role="button" tabindex="0" aria-controls="panel-${escapeHtml(panel)}">
             <div class="vnav-item-inner">
@@ -139,23 +139,23 @@
               <span class="vnav-arrow">↗</span>
             </div>
           </div>`;
-  
+
   const renderWorkProject = ({ number, title, category, url }) => {
     const tag = url ? 'a' : 'div';
     const attrs = url ? ` href="${escapeHtml(url)}" target="_blank" rel="noreferrer"` : '';
     return `
           <${tag} class="work-item"${attrs}><div class="work-stripe"></div><div class="work-item-inner"><div class="work-num">${escapeHtml(number)}</div><div class="work-title">${escapeHtml(title)}</div><div class="work-cat">${escapeHtml(category)}</div></div><div class="work-arrow">↗</div></${tag}>`;
   };
-  
+
   const renderStudioService = ({ name, number }) =>
     `            <li>${escapeHtml(name)} <span>${escapeHtml(number)}</span></li>`;
-  
+
   const renderArchiveItem = ({ number, name, category, year }) =>
     `        <li><span class="archive-num">${escapeHtml(number)}</span><span class="archive-name">${escapeHtml(name)}</span><span class="archive-cat">${escapeHtml(category)}</span><span class="archive-yr">${escapeHtml(year)}</span></li>`;
-  
+
   const renderMarqueeItems = (items) =>
     items.map((item) => `      <span>${escapeHtml(item)}</span>`).join('<span>·</span>\n');
-  
+
   function renderContent() {
     setHtml('#vnavItems', navItems.map(renderNavItem).join('\n'));
     setHtml('#workGrid', workProjects.map(renderWorkProject).join('\n'));
@@ -163,66 +163,74 @@
     setHtml('#archiveList', archiveItems.map(renderArchiveItem).join('\n'));
     setHtml('#marqueeInner', renderMarqueeItems(marqueeItems));
   }
-  
+
     // scripts/modules/scroll-progress.js
   const scrollTrack = () => document.getElementById('scrollTrack');
   const scrollPip = () => document.getElementById('scrollPip');
-  
+
+  let rememberedMainProgress = 0;
+
+  const clampProgress = (pct) => Math.max(0, Math.min(100, pct));
+
+  function setMainScrollProgress(pct, { remember = true } = {}) {
+    const nextProgress = clampProgress(pct);
+    if (remember) rememberedMainProgress = nextProgress;
+
+    const track = scrollTrack();
+    const pip = scrollPip();
+    if (track) track.style.height = `${nextProgress}%`;
+    if (pip) pip.style.top = `${nextProgress}%`;
+  }
+
   function resetMainScrollProgress() {
     setTimeout(() => {
-      const track = scrollTrack();
-      const pip = scrollPip();
-      if (track) track.style.height = '0%';
-      if (pip) pip.style.top = '0%';
+      setMainScrollProgress(rememberedMainProgress, { remember: false });
     }, 450);
   }
-  
+
   function updatePanelScroll(panelId) {
     const panel = document.getElementById(`panel-${panelId}`);
     if (!panel) return;
-  
+
     const body = panel.querySelector('.panel-body');
     const fill = document.getElementById(`fill-${panelId}`);
     const pip = document.getElementById(`pip-${panelId}`);
     if (!body || !fill || !pip) return;
-  
+
     body.addEventListener('scroll', () => {
       const max = body.scrollHeight - body.clientHeight;
       const pct = max > 0 ? (body.scrollTop / max) * 100 : 0;
-  
+
       fill.style.height = `${pct}%`;
       pip.style.top = `${pct}%`;
-  
-      const track = scrollTrack();
-      const mainPip = scrollPip();
-      if (track) track.style.height = `${pct}%`;
-      if (mainPip) mainPip.style.top = `${pct}%`;
+
+      setMainScrollProgress(pct, { remember: false });
     });
   }
-  
+
   function initPanelScrollProgress() {
     panelIds.forEach(updatePanelScroll);
   }
-  
+
     // scripts/modules/clock.js
   function initClock() {
     const clock = document.getElementById('clock');
     if (!clock) return;
-  
+
     const tick = () => {
       const date = new Date();
       const hours = date.getHours();
       const minutes = date.getMinutes();
       const meridiem = hours >= 12 ? 'PM' : 'AM';
       const displayHours = (hours % 12) || 12;
-  
+
       clock.innerHTML = `${displayHours}:${String(minutes).padStart(2, '0')} ${meridiem}<br>New York, NY`;
     };
-  
+
     tick();
     setInterval(tick, 30000);
   }
-  
+
     // scripts/modules/cursor.js
   const hoverSelectors = [
     'a',
@@ -236,34 +244,34 @@
     '.contact-email',
     '.vnav-footer-email',
   ];
-  
+
   function initCursor() {
     const cursor = document.getElementById('cursor');
     if (!cursor) return;
-  
+
     window.addEventListener('mousemove', (event) => {
       cursor.style.left = `${event.clientX}px`;
       cursor.style.top = `${event.clientY}px`;
     });
-  
+
     document.querySelectorAll(hoverSelectors.join(', ')).forEach((element) => {
       element.addEventListener('mouseenter', () => cursor.classList.add('big'));
       element.addEventListener('mouseleave', () => cursor.classList.remove('big'));
     });
   }
-  
+
     // scripts/modules/toggle.js
   function initToggle() {
     const toggle = document.getElementById('toggleWrap');
     const switchElement = document.getElementById('sw');
     if (!toggle || !switchElement) return;
-  
+
     toggle.addEventListener('click', () => {
       const isOn = switchElement.classList.toggle('on');
       toggle.setAttribute('aria-pressed', String(isOn));
     });
   }
-  
+
     // scripts/modules/menu-panels.js
   const focusableSelector = [
     'a[href]',
@@ -273,7 +281,7 @@
     'textarea:not([disabled])',
     '[tabindex]:not([tabindex="-1"])',
   ].join(', ');
-  
+
   function initMenuPanels() {
     const wipe = document.getElementById('panelWipe');
     const page = document.querySelector('.page');
@@ -281,64 +289,64 @@
     const mainNav = document.getElementById('mainNav');
     const menuBtn = document.getElementById('menuBtn');
     if (!wipe || !page || !vnav || !mainNav || !menuBtn) return;
-  
+
     let menuOpen = false;
     let activePanel = null;
     let menuFocusReturn = null;
     let panelFocusReturn = null;
-  
+
     const setMenuState = (isOpen) => {
       menuBtn.setAttribute('aria-expanded', String(isOpen));
       menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
       vnav.setAttribute('aria-hidden', String(!isOpen));
       vnav.inert = !isOpen;
-  
+
       document.querySelectorAll('.vnav-item[data-panel]').forEach((item) => {
         item.setAttribute('tabindex', isOpen ? '0' : '-1');
       });
     };
-  
+
     const setPanelState = (panel, isOpen) => {
       panel.setAttribute('aria-hidden', String(!isOpen));
       panel.inert = !isOpen;
     };
-  
+
     const restoreFocus = (target) => {
       if (target && document.contains(target)) target.focus();
     };
-  
+
     const getFocusable = (container) =>
       [...container.querySelectorAll(focusableSelector)].filter((element) => {
         const style = window.getComputedStyle(element);
         return style.display !== 'none' && style.visibility !== 'hidden';
       });
-  
+
     const trapPanelFocus = (event) => {
       if (event.key !== 'Tab' || !activePanel) return;
-  
+
       const focusable = getFocusable(activePanel);
       if (focusable.length === 0) {
         event.preventDefault();
         activePanel.focus();
         return;
       }
-  
+
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       const activeElement = document.activeElement;
-  
+
       if (event.shiftKey && (!activePanel.contains(activeElement) || activeElement === first)) {
         event.preventDefault();
         last.focus();
         return;
       }
-  
+
       if (!event.shiftKey && activeElement === last) {
         event.preventDefault();
         first.focus();
       }
     };
-  
+
     function openMenu() {
       menuFocusReturn = document.activeElement;
       menuOpen = true;
@@ -347,7 +355,7 @@
       mainNav.classList.add('menu-open');
       page.classList.add('panel-active');
     }
-  
+
     function closeMenu({ restore = true } = {}) {
       menuOpen = false;
       setMenuState(false);
@@ -356,27 +364,27 @@
       if (!activePanel) page.classList.remove('panel-active');
       if (restore) restoreFocus(menuFocusReturn);
     }
-  
+
     function focusPanelClose(panel) {
       const closeButton = panel.querySelector('[data-close]');
       if (closeButton) closeButton.focus();
       else panel.focus();
     }
-  
+
     function openPanel(id, trigger) {
       panelFocusReturn = trigger?.closest('#vnav') ? menuBtn : (trigger || document.activeElement);
       closeMenu({ restore: false });
-  
+
       setTimeout(() => {
         wipe.classList.add('open');
         page.classList.add('panel-active');
-  
+
         setTimeout(() => {
           if (activePanel) {
             activePanel.classList.remove('open');
             setPanelState(activePanel, false);
           }
-  
+
           const panel = document.getElementById(`panel-${id}`);
           if (panel) {
             panel.classList.add('open');
@@ -384,37 +392,37 @@
             activePanel = panel;
             focusPanelClose(panel);
           }
-  
+
           wipe.classList.remove('open');
         }, 420);
       }, 100);
     }
-  
+
     function closePanel() {
       wipe.classList.add('open');
       resetMainScrollProgress();
-  
+
       setTimeout(() => {
         if (activePanel) {
           activePanel.classList.remove('open');
           setPanelState(activePanel, false);
           activePanel = null;
         }
-  
+
         page.classList.remove('panel-active');
         wipe.classList.remove('open');
         restoreFocus(panelFocusReturn || menuBtn);
       }, 420);
     }
-  
+
     setMenuState(false);
     document.querySelectorAll('.panel').forEach((panel) => setPanelState(panel, false));
-  
+
     menuBtn.addEventListener('click', () => {
       if (menuOpen) closeMenu();
       else openMenu();
     });
-  
+
     document.querySelectorAll('.vnav-item[data-panel]').forEach((element) => {
       element.addEventListener('click', () => openPanel(element.dataset.panel, element));
       element.addEventListener('keydown', (event) => {
@@ -423,49 +431,218 @@
         openPanel(element.dataset.panel, element);
       });
     });
-  
+
     document.querySelectorAll('[data-close]').forEach((button) => {
       button.addEventListener('click', closePanel);
     });
-  
+
     document.addEventListener('keydown', (event) => {
       trapPanelFocus(event);
-  
+
       if (event.key !== 'Escape') return;
-  
+
       if (activePanel) closePanel();
       else if (menuOpen) closeMenu();
     });
   }
-  
+
     // scripts/modules/parallax.js
   const depths = [0.018, 0.022, 0.014, 0.020, 0.016, 0.012];
-  
+
   function initParallax() {
     const objects = document.querySelectorAll('.obj');
     const hero = document.querySelector('.hero');
     if (!hero) return;
-  
+
     window.addEventListener('mousemove', (event) => {
       const centerX = window.innerWidth / 2;
       const centerY = window.innerHeight / 2;
       const ratioX = (event.clientX - centerX) / centerX;
       const ratioY = (event.clientY - centerY) / centerY;
-  
+
       objects.forEach((object, index) => {
         const depth = depths[index] || 0.015;
         object.style.marginLeft = `${ratioX * depth * 100}px`;
         object.style.marginTop = `${ratioY * depth * 60}px`;
       });
-  
+
       hero.style.transform = `translate(${ratioX * -10}px, ${ratioY * -6}px)`;
     });
   }
-  
+
+    // scripts/modules/pinned-narrative.js
+  const interactiveSelector = [
+    'a[href]',
+    'button',
+    'input',
+    'select',
+    'textarea',
+    '[contenteditable="true"]',
+    '[role="button"]',
+    '[tabindex]:not([tabindex="-1"])',
+  ].join(', ');
+
+  const clamp = (value, min = 0, max = 1) => Math.max(min, Math.min(max, value));
+
+  function isInteractiveTarget(target) {
+    return target instanceof Element && Boolean(target.closest(interactiveSelector));
+  }
+
+  function isOverlayActive() {
+    return Boolean(document.querySelector('.vnav.open, .panel.open'));
+  }
+
+  function normalizeWheelDelta(event) {
+    const modeMultiplier = event.deltaMode === 1
+      ? 16
+      : event.deltaMode === 2
+        ? window.innerHeight
+        : 1;
+
+    return event.deltaY * modeMultiplier;
+  }
+
+  function initPinnedNarrative() {
+    const root = document.getElementById('pinnedNarrative');
+    const page = document.querySelector('.page');
+    if (!root || !page) return;
+
+    const scenes = [...root.querySelectorAll('[data-narrative-scene-index]')];
+    if (scenes.length === 0) return;
+
+    const reduceMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const lastSceneIndex = scenes.length - 1;
+    let progress = 0;
+    let touchY = null;
+    let lastDiscreteStep = 0;
+
+    const activeSceneIndex = () => Math.round(progress * lastSceneIndex);
+
+    const updateScene = () => {
+      const sceneIndex = activeSceneIndex();
+      root.dataset.narrativeScene = String(sceneIndex);
+
+      scenes.forEach((scene, index) => {
+        const isActive = index === sceneIndex;
+        if (isActive) scene.setAttribute('data-active', 'true');
+        else scene.removeAttribute('data-active');
+        scene.setAttribute('aria-hidden', String(!isActive));
+      });
+
+      page.style.setProperty('--narrative-progress', progress.toFixed(3));
+      page.style.setProperty('--narrative-hero-scale', (1 - progress * 0.08).toFixed(3));
+      page.style.setProperty('--narrative-hero-opacity', Math.max(0.04, 1 - progress * 1.8).toFixed(3));
+      page.style.setProperty('--narrative-object-opacity', Math.max(0.12, 1 - progress * 1.05).toFixed(3));
+      page.style.setProperty('--narrative-hint-opacity', Math.max(0, 0.3 - progress * 1.8).toFixed(3));
+
+      if (!isOverlayActive()) setMainScrollProgress(progress * 100);
+    };
+
+    const setProgress = (nextProgress) => {
+      const clampedProgress = clamp(nextProgress);
+      if (clampedProgress === progress) return;
+
+      progress = clampedProgress;
+      updateScene();
+    };
+
+    const setScene = (sceneIndex) => {
+      const nextScene = clamp(sceneIndex, 0, lastSceneIndex);
+      setProgress(lastSceneIndex === 0 ? 0 : nextScene / lastSceneIndex);
+    };
+
+    const stepScene = (direction) => {
+      const now = performance.now();
+      if (now - lastDiscreteStep < 160) return;
+      lastDiscreteStep = now;
+      setScene(activeSceneIndex() + direction);
+    };
+
+    const canHandleInput = (event) => {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return false;
+      if (isOverlayActive()) return false;
+      if (isInteractiveTarget(event.target)) return false;
+      return !isInteractiveTarget(document.activeElement);
+    };
+
+    const onWheel = (event) => {
+      if (!canHandleInput(event)) return;
+
+      const delta = normalizeWheelDelta(event);
+      if (Math.abs(delta) < 1) return;
+
+      event.preventDefault();
+
+      if (reduceMotionQuery.matches) {
+        stepScene(Math.sign(delta));
+        return;
+      }
+
+      setProgress(progress + clamp(delta * 0.00072, -0.12, 0.12));
+    };
+
+    const onTouchStart = (event) => {
+      if (event.touches.length !== 1 || isOverlayActive()) {
+        touchY = null;
+        return;
+      }
+
+      touchY = event.touches[0].clientY;
+    };
+
+    const onTouchMove = (event) => {
+      if (touchY === null || event.touches.length !== 1 || isOverlayActive()) return;
+      if (isInteractiveTarget(event.target)) return;
+
+      const nextY = event.touches[0].clientY;
+      const delta = touchY - nextY;
+      if (Math.abs(delta) < 2) return;
+
+      event.preventDefault();
+      touchY = nextY;
+      setProgress(progress + clamp(delta * 0.0012, -0.08, 0.08));
+    };
+
+    const onKeyDown = (event) => {
+      if (!canHandleInput(event)) return;
+
+      if (event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ' || event.key === 'Spacebar') {
+        event.preventDefault();
+        stepScene(1);
+        return;
+      }
+
+      if (event.key === 'ArrowUp' || event.key === 'PageUp') {
+        event.preventDefault();
+        stepScene(-1);
+        return;
+      }
+
+      if (event.key === 'Home') {
+        event.preventDefault();
+        setScene(0);
+        return;
+      }
+
+      if (event.key === 'End') {
+        event.preventDefault();
+        setScene(lastSceneIndex);
+      }
+    };
+
+    updateScene();
+
+    window.addEventListener('wheel', onWheel, { passive: false });
+    window.addEventListener('touchstart', onTouchStart, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: false });
+    window.addEventListener('keydown', onKeyDown);
+  }
+
     // scripts/main.js
   renderContent();
   initCursor();
   initPanelScrollProgress();
+  initPinnedNarrative();
   initClock();
   initToggle();
   initMenuPanels();
