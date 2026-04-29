@@ -90,23 +90,20 @@
 }
 
 .reveal-underline {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
+  display: inline;
+  white-space: normal;
+  background-image: linear-gradient(var(--color-accent), var(--color-accent));
+  background-repeat: no-repeat;
+  background-position: 0 calc(100% - 0.03em);
+  background-size: 0% 0.055em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size var(--duration-reveal) var(--ease-reveal);
+  transition-delay: var(--underline-delay, 0s);
 }
 
 .reveal-underline::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.03em;
-  height: 0.055em;
-  background: var(--color-accent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform var(--duration-reveal) var(--ease-reveal);
-  transition-delay: var(--underline-delay, 0s);
+  content: none;
 }
 
 .narrative-scene[data-active="true"] .reveal-underline::after {
