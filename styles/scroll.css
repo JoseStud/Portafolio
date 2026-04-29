@@ -50,7 +50,8 @@
   align-items: center;
   gap: 8px;
   pointer-events: none;
-  opacity: 0.3;
+  opacity: var(--narrative-hint-opacity, 0.3);
+  transition: opacity var(--duration-medium) ease;
 }
 .scroll-hint-label {
   font-size: 7px;
