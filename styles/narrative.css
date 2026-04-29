@@ -15,9 +15,22 @@
   overflow: hidden;
 }
 
+.narrative::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.74) 48%, rgba(0, 0, 0, 0.5) 100%),
+    radial-gradient(circle at 26% 50%, rgba(var(--color-black-rgb), 0.72) 0%, rgba(var(--color-black-rgb), 0) 58%);
+  opacity: clamp(0, calc(var(--narrative-progress) * 1.4), 0.92);
+  transition: opacity var(--duration-reveal) ease;
+}
+
 .narrative-scene {
   position: absolute;
   inset: 0;
+  z-index: 1;
   display: grid;
   align-content: center;
   justify-items: start;
@@ -25,6 +38,7 @@
   opacity: 0;
   visibility: hidden;
   transform: translateY(28px) scale(0.985);
+  text-shadow: 0 2px 18px rgba(var(--color-black-rgb), 0.74);
   transition:
     opacity var(--duration-reveal) ease,
     visibility 0s linear var(--duration-reveal),
@@ -48,7 +62,7 @@
   letter-spacing: 0.22em;
   line-height: 1.6;
   text-transform: uppercase;
-  color: rgba(var(--color-fg-rgb), 0.4);
+  color: rgba(var(--color-fg-rgb), 0.72);
 }
 
 .narrative-meta {
@@ -80,7 +94,7 @@
   margin-top: var(--space-6);
   font-size: 13px;
   line-height: 1.85;
-  color: rgba(var(--color-fg-rgb), 0.62);
+  color: rgba(var(--color-fg-rgb), 0.84);
 }
 
 .capability-list {
@@ -92,13 +106,13 @@
 .capability-list span {
   display: block;
   padding: 16px 0;
-  border-bottom: 1px solid rgba(var(--color-fg-rgb), 0.11);
+  border-bottom: 1px solid rgba(var(--color-fg-rgb), 0.22);
   font-family: var(--font-display);
   font-size: clamp(42px, 6vw, 92px);
   line-height: 0.95;
   letter-spacing: 0;
   text-transform: uppercase;
-  color: rgba(var(--color-fg-rgb), 0.88);
+  color: rgba(var(--color-fg-rgb), 0.96);
 }
 
 .feature-strip {
@@ -106,13 +120,14 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   width: min(1040px, 84vw);
-  background: rgba(var(--color-fg-rgb), 0.1);
+  background: rgba(var(--color-fg-rgb), 0.18);
 }
 
 .feature-strip div {
   min-height: 210px;
   padding: var(--space-5);
-  background: rgba(var(--color-bg), 0.82);
+  background: rgba(6, 6, 6, 0.94);
+  border: 1px solid rgba(var(--color-fg-rgb), 0.14);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -125,19 +140,20 @@
   letter-spacing: 0.16em;
   line-height: 1.5;
   text-transform: uppercase;
-  color: rgba(var(--color-fg-rgb), 0.38);
+  color: rgba(var(--color-fg-rgb), 0.68);
 }
 
 .feature-strip strong {
   display: block;
   margin: var(--space-4) 0 var(--space-2);
   font-family: var(--font-display);
-  font-size: clamp(34px, 4vw, 58px);
+  font-size: clamp(30px, 3.3vw, 48px);
   font-weight: 400;
   line-height: 0.95;
   letter-spacing: 0;
   text-transform: uppercase;
   color: var(--color-fg);
+  overflow-wrap: anywhere;
 }
 
 .process-line {
@@ -147,17 +163,18 @@
   gap: 1px;
   width: min(1040px, 84vw);
   list-style: none;
-  background: rgba(var(--color-fg-rgb), 0.1);
+  background: rgba(var(--color-fg-rgb), 0.18);
 }
 
 .process-line li {
   counter-increment: process;
   min-height: 170px;
   padding: var(--space-5);
-  background: rgba(var(--color-bg), 0.82);
+  background: rgba(6, 6, 6, 0.94);
+  border: 1px solid rgba(var(--color-fg-rgb), 0.14);
   font-size: clamp(18px, 2vw, 30px);
   line-height: 1.2;
-  color: rgba(var(--color-fg-rgb), 0.86);
+  color: rgba(var(--color-fg-rgb), 0.95);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -167,14 +184,14 @@
   content: counter(process, decimal-leading-zero);
   font-size: 9px;
   letter-spacing: 0.18em;
-  color: rgba(var(--color-fg-rgb), 0.32);
+  color: rgba(var(--color-fg-rgb), 0.7);
 }
 
 .narrative-link {
   display: inline-block;
   margin-top: var(--space-8);
-  border-bottom: 1px solid rgba(var(--color-fg-rgb), 0.25);
-  color: rgba(var(--color-fg-rgb), 0.62);
+  border-bottom: 1px solid rgba(var(--color-fg-rgb), 0.45);
+  color: rgba(var(--color-fg-rgb), 0.84);
   font-size: 14px;
   letter-spacing: 0.08em;
   line-height: 1.7;
@@ -257,7 +274,8 @@
 @media (prefers-reduced-motion: reduce) {
   .narrative-scene,
   .objects,
-  .narrative-link {
+  .narrative-link,
+  .narrative::before {
     transition-duration: var(--duration-instant) !important;
   }
 }

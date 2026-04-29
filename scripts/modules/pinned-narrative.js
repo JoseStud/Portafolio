@@ -60,8 +60,8 @@ export function initPinnedNarrative() {
 
     page.style.setProperty('--narrative-progress', progress.toFixed(3));
     page.style.setProperty('--narrative-hero-scale', (1 - progress * 0.08).toFixed(3));
-    page.style.setProperty('--narrative-hero-opacity', Math.max(0.16, 1 - progress * 1.15).toFixed(3));
-    page.style.setProperty('--narrative-object-opacity', Math.max(0.24, 1 - progress * 0.72).toFixed(3));
+    page.style.setProperty('--narrative-hero-opacity', Math.max(0.04, 1 - progress * 1.8).toFixed(3));
+    page.style.setProperty('--narrative-object-opacity', Math.max(0.12, 1 - progress * 1.05).toFixed(3));
     page.style.setProperty('--narrative-hint-opacity', Math.max(0, 0.3 - progress * 1.8).toFixed(3));
 
     if (!isOverlayActive()) setMainScrollProgress(progress * 100);
